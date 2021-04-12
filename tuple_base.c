@@ -1,11 +1,5 @@
 #include "tuple_base.h"
 
-static bool get_result(char *str1, char *str2, bool result) {
-    free(str1);
-    free(str2);
-    return result;
-}
-
 vector *tuple_get(struct read_handler *h) {
     char *line = read_handler_read_line(h);
 
@@ -18,13 +12,13 @@ bool tuple_less(vector *tup1, vector *tup2) {
     char *str2 = string_get(vector_get(tup2, 0));
 
     if(str1 == NULL || str2 == NULL)
-        return get_result(str1, str2, false);
+        return false;
 
     if(!strcmp(str1, ""))
-        return get_result(str1, str2, false); /* Tup1 is greater since its at EOF */
+        return false; /* Tup1 is greater since its at EOF */
     if(!strcmp(str2, ""))
-        return get_result(str1, str2, true);  /* Tup2 is less since its at EOF */
-    return get_result(str1, str2, strcmp(str1, str2) < 0);
+        return true;  /* Tup2 is less since its at EOF */
+    return strcmp(str1, str2) < 0;
 }
 
 bool tuple_greater(vector *tup1, vector *tup2) {
@@ -32,13 +26,13 @@ bool tuple_greater(vector *tup1, vector *tup2) {
     char *str2 = string_get(vector_get(tup2, 0));
 
     if(str1 == NULL || str2 == NULL)
-        return get_result(str1, str2, false);
+        return false;
 
     if(!strcmp(str1, ""))
-        return get_result(str1, str2, true);  /* Tup1 is greater since its at EOF */
+        return true;  /* Tup1 is greater since its at EOF */
     if(!strcmp(str2, ""))
-        return get_result(str1, str2, false); /* Tup2 is less since its at EOF */
-    return get_result(str1, str2, strcmp(str1, str2) > 0);
+        return false; /* Tup2 is less since its at EOF */
+    return strcmp(str1, str2) > 0;
 }
 
 bool tuple_key_equals(vector *tup1, vector *tup2) {
@@ -46,9 +40,9 @@ bool tuple_key_equals(vector *tup1, vector *tup2) {
     char *str2 = string_get(vector_get(tup2, 0));
     
     if(str1 == NULL || str2 == NULL)
-        return get_result(str1, str2, false);
+        return false;
 
-    return get_result(str1, str2, strcmp(str1, str2) == 0);
+    return strcmp(str1, str2) == 0;
 }
 
 bool tuple_value_equals(vector *tup1, vector *tup2) {
@@ -56,34 +50,24 @@ bool tuple_value_equals(vector *tup1, vector *tup2) {
     char *num2 = string_get(vector_get(tup2, 1));
     
     if(num1 == NULL || num2 == NULL)
-        return get_result(num1, num2, false);
+        return false;
 
-    return get_result(num1, num2, strcmp(num1, num2) == 0);
+    return strcmp(num1, num2) == 0;
 }
 
 bool tuple_eof(vector *tup) {
     /* TODO -> WORKS IF WE ASSUME WE READ COHERENT FILES, CHECK FOR ACTUAL NULLITY */
-    bool result;
     char *str = string_get(vector_get(tup, 0));
 
-    if(tup == NULL) {
-        free(str);
+    if(tup == NULL)
         return true;
-    }
-    if(vector_get(tup, 0) == NULL) {
-        free(str);
+    if(vector_get(tup, 0) == NULL)
         return true;
-    }
 
-    if(str == NULL) {
-        free(str);
+    if(str == NULL)
         return true;
-    }
 
-    result = strcmp(str, "") == 0;
-
-    free(str);
-    return result;
+    return strcmp(str, "") == 0;
 }
 
 void tuple_free(vector *tup) {

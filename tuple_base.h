@@ -4,7 +4,7 @@
 /* Dependencies */
 #include "read_handler_base.h"
 #include "write_handler_base.h"
-#include "string_builder_base.h"
+#include "string_base.h"
 #include "vector_base.h"
 
 /**

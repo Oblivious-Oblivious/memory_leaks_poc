@@ -13,15 +13,13 @@ static struct write_handler *r_writer = NULL;
  */
 static void add_evaluation(vector *rel, size_t agg) {
     char buf[32];
-    char *r0 = NULL;
 
     snprintf(buf, sizeof(buf), "%lu", agg);
-    write_handler_write(r_writer, (r0 = string_get(vector_get(rel, 0))));
+    write_handler_write(r_writer, string_get(vector_get(rel, 0)));
     write_handler_write(r_writer, "\t");
     write_handler_write(r_writer, buf);
     write_handler_write(r_writer, "\n");
 
-    free(r0);
     tuple_free(rel);
 }
 
