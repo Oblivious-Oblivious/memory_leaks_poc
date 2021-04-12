@@ -268,4 +268,5 @@ void call_aggregate(char *R) {
 
 int main(void) {
     call_aggregate(R_TSV);
+    return 0;
 }
