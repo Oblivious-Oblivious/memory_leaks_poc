@@ -1,7 +1,8 @@
 CC = gcc
-OPT = -O2
-#OPT = -Og -g
-VERSION = -std=c89
+#OPT = -O2
+OPT = -Og -g
+#VERSION = -std=c89
+VERSION = -std=c99
 
 FLAGS = -Wall -Wextra -Werror -pedantic -pedantic-errors -Wpedantic
 WARNINGS =

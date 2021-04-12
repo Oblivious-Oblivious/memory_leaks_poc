@@ -151,42 +151,6 @@ unsigned char string_equals(string *sb, string *other) {
     return strcmp(string_get(sb), string_get(other)) == 0;
 }
 
-char *string_identifier(string *sb) {
-    unsigned char add_underscore = 0;
-    char buf[32];
-    size_t i;
-    string *output = NULL;
-    string *ret_value = NULL;
-
-    if(sb == NULL) return NULL;
-
-    output = string_new("");
-
-    for(i = 0; i < string_length(sb); i++) {
-        char c = string_get(sb)[i];
-
-        if((c > 47 && c < 58)
-        || (c > 64 && c < 91)
-        || (c > 96 && c != 95 && c < 123))
-            string_add_char(output, c);
-        else if(c == 32)
-            string_add_char(output, '_');
-        else {
-            if(i == 0) add_underscore = 1;
-            snprintf(buf, 2, "%02x", c & 0xff);
-            string_add_str(output, buf);
-        }
-    }
-
-    if(add_underscore)
-        ret_value = string_new("_");
-    else
-        ret_value = string_new("");
-    string_add_str(ret_value, string_get(output));
-
-    return string_get(ret_value);
-}
-
 void string_free(string *sb) {
     free(sb->str);
     free(sb);
