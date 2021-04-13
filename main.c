@@ -1,6 +1,6 @@
-#include "aggregate.h"
 #include "OPTIONS.h"
 #include "tuple_base.h"
+#include "min_pq_binary_heap.h"
 
 /* Readers */
 static struct read_handler *r_reader = NULL;
