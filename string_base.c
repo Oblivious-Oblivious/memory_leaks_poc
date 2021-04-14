@@ -13,7 +13,7 @@ static void string_ensure_space(string *sb, size_t capacity) {
     if(sb == NULL || capacity == 0) return;
 
     /* Attempt to reallocate new memory in the items list */
-    sb->str = (char*)realloc(sb->str, sizeof(char*) * capacity);
+    new_str = (char*)realloc(sb->str, sizeof(char*) * capacity);
 
     if(new_str) {
         /* Reset the items in the new memory space */
@@ -58,7 +58,7 @@ void string_add_str(string *sb, const char *str) {
 
     len = strlen(str);
     
-    if(sb->alloced >= sb->length)
+    if(sb->alloced == sb->length)
         string_ensure_space(sb, sb->alloced * GOLDEN_MEAN);
 
     /* Copy the value into memory */
@@ -72,7 +72,7 @@ void string_add_str(string *sb, const char *str) {
 void string_add_char(string *sb, char c) {
     if(sb == NULL) return;
 
-    if(sb->alloced >= sb->length)
+    if(sb->alloced == sb->length)
         string_ensure_space(sb, sb->alloced * GOLDEN_MEAN);
 
     sb->str[sb->length] = c;
