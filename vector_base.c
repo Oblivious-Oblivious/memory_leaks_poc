@@ -88,17 +88,9 @@ size_t vector_length(vector *v) {
 }
 
 void vector_free(vector *v) {
-    size_t i;
-    size_t vlen;
-    if(v == NULL) return;
-    if(v->items != NULL) return;
-
-    vlen = vector_length(v);
-    /* 
-    for(i = 0; i < vlen; i++)
-        free(v->items[i]);
-    */
-    
-    free(v->items);
-    free(v);
+    /* TODO -> IMPLEMENT A CUSTOM FREE METHOD FOR ARRAY ELEMENTS */
+    if(v->items != NULL)
+        free(v->items);
+    if(v != NULL)
+        free(v);
 }

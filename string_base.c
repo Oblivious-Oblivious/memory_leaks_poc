@@ -2,12 +2,6 @@
 
 #define GOLDEN_MEAN 1.618
 
-/**
- * @func: string_ensure_space
- * @desc: Ensure there is enough space for data being added plus a NULL terminator
- * @param sb -> The string builder to use
- * @param add_len -> he length that needs to be added *not* including a NULL terminator
- **/
 static void string_ensure_space(string *sb, size_t capacity) {
     char *new_str = NULL;
     if(sb == NULL || capacity == 0) return;
@@ -58,7 +52,7 @@ void string_add_str(string *sb, const char *str) {
 
     len = strlen(str);
     
-    if(sb->alloced == sb->length)
+    if(sb->alloced >= sb->length)
         string_ensure_space(sb, sb->alloced * GOLDEN_MEAN);
 
     /* Copy the value into memory */
@@ -72,7 +66,7 @@ void string_add_str(string *sb, const char *str) {
 void string_add_char(string *sb, char c) {
     if(sb == NULL) return;
 
-    if(sb->alloced == sb->length)
+    if(sb->alloced >= sb->length)
         string_ensure_space(sb, sb->alloced * GOLDEN_MEAN);
 
     sb->str[sb->length] = c;
@@ -122,8 +116,8 @@ void string_delete(string *sb) {
     if(sb == NULL) return;
 
     /* Call shorten with 0, clearing out the string */
-    string_free(sb);
     string_shorten(sb, 0);
+    string_free(sb);
 }
 
 void string_skip(string *sb, size_t len) {
