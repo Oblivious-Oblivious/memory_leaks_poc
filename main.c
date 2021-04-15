@@ -1,6 +1,6 @@
 #include "OPTIONS.h"
 #include "tuple_base.h"
-#include "min_pq_binary_heap.h"
+#include "min_pq_binary_heap_base.h"
 
 /* Readers */
 static struct read_handler *r_reader = NULL;
@@ -76,10 +76,11 @@ static void sort_using_priority_queue(vector **curr_partition) {
     self = pq_new(BUFFER_SIZE);
 
     for(i = 0; i < curr_len; i++)
-        pq_insert(self, i, vector_get(*curr_partition, i));
+        pq_insert(self, vector_get(*curr_partition, i));
 
     while(!pq_is_empty(self)) {
-        vector *key = pq_get_key(self, pq_get_min(self));
+        /*vector *key = (vector*)pq_get_key(self, (size_t)pq_get_min(self));*/
+        vector *key = pq_get_min(self);
         vector_add(sorted, key);
 
         pq_delete_min(self);
@@ -140,7 +141,8 @@ static void flush_memory_to_output(struct min_pq_binary_heap *memory) {
 
     while(true) {
         /* Peek the top of the heap */
-        curr = pq_get_key(memory, pq_get_min(memory));
+        /*curr = (vector*)pq_get_key(memory, (size_t)pq_get_min(memory));*/
+        curr = (vector*)pq_get_min(memory);
         /* Remove the node */
         pq_delete_min(memory);
 
@@ -196,7 +198,7 @@ static void sort_and_merge_final_endpoints(void) {
     while(true) {
         for(i = 0; i < BUFFER_SIZE+1; i++) {
             if(tuple_eof(tup)) goto panic_exit;
-            pq_insert(memory, i, tup);
+            pq_insert(memory, tup);
             tup = tuple_get(r_reader);
         }
         flush_memory_to_output(memory);
@@ -229,7 +231,7 @@ static void merge_runs(vector *runs, size_t data_size) {
             part_index++;
 
         /* Care if some block has less values in and counter it with the MOD */
-        pq_insert(memory, data_index, vector_get(block, (part_index % BUFFER_SIZE)));
+        pq_insert(memory, vector_get(block, (part_index % BUFFER_SIZE)));
 
         /* At this point the memory is full */
         if((data_index+1) % BUFFER_SIZE == 0 && (data_index+1) != 0)
